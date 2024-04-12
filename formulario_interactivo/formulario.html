@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formulario Interactivo</title>
+<style>
+.error {
+  color: red;
+}
+#welcomeImage {
+  width: 250px; /* Cambia el tamaño de la imagen según lo necesites */
+  height: auto; /* Mantiene la proporción de la imagen */
+}
+
+#passwordCriteria {
+  color: gray;
+  font-size: 0.8em;
+}
+</style>
+</head>
+<body>
+
+<h2>Formulario Interactivo</h2>
+
+<!-- Imagen inicial arriba del formulario -->
+<img id="welcomeImage" src="formulario.jpg" alt="Formulario de registro">
+
+<form id="myForm">
+  <label for="textInput">Usuario:</label><br>
+  <input type="text" id="textInput" name="textInput" required><br><br>
+  
+  <label for="passwordInput">Contraseña:</label><br>
+  <input type="password" id="passwordInput" name="passwordInput" required>
+  <p id="passwordCriteria">La contraseña debe tener al menos 8 caracteres y contener al menos un carácter especial.</p><br>
+  
+  <label for="confirmPasswordInput">Confirmar Contraseña:</label><br>
+  <input type="password" id="confirmPasswordInput" name="confirmPasswordInput" required><br><br>
+  
+  <label>Seleccione su género:</label><br>
+  <input type="radio" id="male" name="gender" value="male">
+  <label for="male">Masculino</label><br>
+  <input type="radio" id="female" name="gender" value="female">
+  <label for="female">Femenino</label><br><br>
+  
+  <input type="checkbox" id="termsCheckbox" required>
+  <label for="termsCheckbox">Acepto los términos y condiciones</label><br><br>
+  
+  <input type="button" onclick="submitForm()" value="Enviar">
+</form>
+
+<p id="errorMessage" class="error"></p>
+<p id="successMessage"></p>
+
+<script>
+function submitForm() {
+  const form = document.getElementById("myForm");
+  const userData = {
+    username: form.elements["textInput"].value,
+    password: form.elements["passwordInput"].value,
+    confirmPassword: form.elements["confirmPasswordInput"].value,
+    gender: form.elements["gender"].value,
+    termsAccepted: form.elements["termsCheckbox"].checked
+  };
+  
+  // Verificar si la contraseña está vacía
+  if (userData.password.trim() === "") {
+    document.getElementById("errorMessage").innerHTML = "Por favor ingrese una contraseña.";
+    return;
+  }
+  
+  // Verificar si la contraseña tiene al menos 8 caracteres
+  if (userData.password.length < 8) {
+    document.getElementById("errorMessage").innerHTML = "La contraseña debe tener al menos 8 caracteres.";
+    return;
+  }
+  
+  // Verificar si la contraseña contiene al menos un carácter especial
+  const specialCharacters = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+  if (!specialCharacters.test(userData.password)) {
+    document.getElementById("errorMessage").innerHTML = "La contraseña debe contener al menos un carácter especial.";
+    return;
+  }
+  
+  // Verificar si las contraseñas coinciden
+  if (userData.password !== userData.confirmPassword) {
+    document.getElementById("errorMessage").innerHTML = "Las contraseñas no coinciden.";
+    return;
+  }
+  
+  // Verificar si se seleccionó un género
+  if (!userData.gender) {
+    document.getElementById("errorMessage").innerHTML = "Por favor seleccione su género.";
+    return;
+  }
+  
+  // Verificar si se aceptaron los términos y condiciones
+  if (!userData.termsAccepted) {
+    document.getElementById("errorMessage").innerHTML = "Por favor acepte los términos y condiciones.";
+    return;
+  }
+  
+  // Si todos los datos son válidos, mostrar mensaje de éxito y cambiar la imagen
+  document.getElementById("successMessage").innerHTML = "¡Registro exitoso!";
+  document.getElementById("errorMessage").innerHTML = "";
+  document.getElementById("myForm").reset(); // Reiniciar el formulario
+  
+  // Cambiar la imagen por una de bienvenida
+  document.getElementById("welcomeImage").src = "bienvenida.jpg";
+}
+</script>
+
+</body>
+</html>
